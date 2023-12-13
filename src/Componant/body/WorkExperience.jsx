@@ -10,6 +10,7 @@ function WorkExperience() {
   ]);
   const [showEducation, setShowEducation] = useState(false);
   const [showPersonalDetails, setShowPersonalDetails] = useState(false);
+  const [showWorkExperience,setShowWorkExperience] = useState(true)
 
   const handleButtonClick = (event) => {
     event.preventDefault();
@@ -18,9 +19,16 @@ function WorkExperience() {
     if (selectedComponent === "personaldetails") {
       setShowPersonalDetails(true);
       setShowEducation(false);
+      setShowWorkExperience(false)
     } else if (selectedComponent === "education") {
       setShowPersonalDetails(false);
       setShowEducation(true);
+      setShowWorkExperience(false)
+    }else if(selectedComponent === 'workexperience'){
+      setShowPersonalDetails(false);
+      setShowEducation(false);
+      setShowWorkExperience(true)
+      
     }
   };
 
@@ -58,7 +66,7 @@ function WorkExperience() {
     <div>
       {showEducation && <EducationDetails />}
       {showPersonalDetails && <PersonalDetails />}
-      {workExperiences && (
+      {showWorkExperience && (
         <div>
           <h4>Work Experience</h4>
           {workExperiences && workExperiences.map((experience, index) => (

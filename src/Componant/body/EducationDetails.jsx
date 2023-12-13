@@ -92,7 +92,9 @@ function EducationDetails() {
               <hr />
 
               <div>
-                <label>Type:</label>
+                <div><label>Type:</label></div>
+                
+                
                 <select
                   name="education"
                   value={educationSet.education}
@@ -108,7 +110,8 @@ function EducationDetails() {
 
               <div className="d-flex justify-content-between">
                 <div>
-                  <label>University:</label>
+                  <div><label>University:</label></div>
+                  
                   <input
                     type="text"
                     placeholder="University"
@@ -119,7 +122,8 @@ function EducationDetails() {
                 </div>
 
                 <div>
-                  <label>Degree:</label>
+                  <div><label>Degree:</label></div>
+                  
                   <input
                     type="text"
                     placeholder="Degree"
@@ -132,7 +136,8 @@ function EducationDetails() {
 
               <div className="d-flex justify-content-between">
                 <div>
-                  <label>Start Year:</label>
+                  <div><label>Start Year:</label></div>
+                  
                   <select
                     name="startYear"
                     value={educationSet.startYear}
@@ -146,7 +151,8 @@ function EducationDetails() {
                   </select>
                 </div>
                 <div>
-                  <label>End Year:</label>
+                  <div><label>End Year:</label></div>
+                  
                   <select
                     name="endYear"
                     value={educationSet.endYear}
