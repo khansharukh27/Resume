@@ -26,6 +26,7 @@ function Home() {
 
   return (
     <div>
+      
       <h1>Template</h1>
       <p>Select a template to get started</p>
       <div className="d-flex ms-2 me-2 mt-4" style={{ width: "100%" }}>

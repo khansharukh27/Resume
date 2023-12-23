@@ -69,7 +69,7 @@ function Certification() {
                   onChange={(e) => handleInputChange(e, index)}
                   value={state.value}
                   type="text"
-                  name={`skill${index * 2 + 1}`}
+                  name={state.name}
                   placeholder="Enter link"
                 />
                 {/* <input

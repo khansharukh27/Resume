@@ -6,36 +6,19 @@ import Certification from './Certification';
 function KeySkills() {
   const { formData, updateFormData } = useContext(FormContext);
   const [skills, setSkills] = useState([
-    { name: 'Skill-1', value: '' },
-    { name: 'Skill-2', value: '' },
+    { name: `skill`, value: '' },
+    { name: `skill`, value: '' },
   ]);
 
   const [showKeySkill, setShowKeySkill] = useState(true);
   const [showEducation, setShowEducation] = useState(false);
   const [showCertification, setShowCertification] = useState(false);
 
-  const handleButtonClick = (event) => {
-    const selectedComponent = event.target.value;
-
-    if (selectedComponent === 'keyskills') {
-      setShowEducation(false);
-      setShowKeySkill(true);
-      setShowCertification(false);
-    } else if (selectedComponent === 'education') {
-      setShowEducation(true);
-      setShowKeySkill(false);
-      setShowCertification(false);
-    } else if (selectedComponent === 'certification') {
-      setShowEducation(false);
-      setShowKeySkill(false);
-      setShowCertification(true);
-    }
-  };
-
-  const handleChange = (index, event) => {
-    const { value } = event.target;
+  
+  const handleChange = (index, e) => {
+    const {  value } = e.target;
     const newSkills = [...skills];
-    newSkills[index] = { ...newSkills[index], value };
+    newSkills[index].value = value;
     setSkills(newSkills);
 
     const updatedFormData = {
@@ -50,18 +33,33 @@ function KeySkills() {
       },
     });
   };
-
+console.log('skills:-',skills)
   const handleAddMore = () => {
     const newIndex = skills.length + 1;
     setSkills([...skills, { name: `Skill-${newIndex}`, value: '' }, { name: `Skill-${newIndex + 1}`, value: '' }]);
   };
 
   const handleSubmit = (e) => {
+    const selectComponent = e.target.value
     e.preventDefault();
-    console.log('KeySkills formData before navigating:', formData);
+    if(selectComponent === 'certification'){
 
-    setShowCertification(true);
-    setShowKeySkill(false);
+      setShowCertification(true)
+      setShowKeySkill(false)
+      setShowEducation(false)
+    }else if(selectComponent === 'education'){
+      setShowCertification(false)
+      setShowEducation(true)
+      setShowKeySkill(false)
+    }else if(selectComponent === 'keyskills'){
+      setShowCertification(false)
+      setShowEducation(false)
+      setShowKeySkill(true)
+    }
+    
+
+    // Navigate to the next step (you may replace this with your navigation logic)
+    // Example: history.push('/next-step');
   };
 
   return (
@@ -98,7 +96,7 @@ function KeySkills() {
           <div className="d-flex justify-content-between mt-5">
             <button
               className="btn btn-primary btn-lg align-items-end"
-              onClick={handleButtonClick}
+              onClick={handleSubmit}
               value="education"
             >
               Previous

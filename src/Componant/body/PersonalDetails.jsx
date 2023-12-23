@@ -1,23 +1,43 @@
 import React, { useContext, useState } from 'react';
 import WorkExperience from './WorkExperience';
 import FormContext from '../context/FormContext';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
+import Home from '../Navbar/Home';
 
 function PersonalDetails() {
   const { formData, updateFormData } = useContext(FormContext);
+  const [showHome,setShowHome] = useState(false)
   const [showWorkExperience, setShowWorkExperience] = useState(false);
+  const [showPersonalDetails,setShowPersonalDetails] = useState(true)
+  
   const [profilePicture, setProfilePicture] = useState(formData.profilePicture || null);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleButtonClick = (e) => {
+   const selectComponent = e.target.value;
     e.preventDefault();
     console.log("Next button clicked");
-    setShowWorkExperience(true);
+    if(selectComponent === 'home'){
+      setShowHome(true)
+      setShowWorkExperience(false)
+      setShowPersonalDetails(false)
+    }else if(selectComponent === 'workexperience'){
+      setShowHome(false)
+      setShowWorkExperience(true)
+      setShowPersonalDetails(false)
+      
+    }else if(selectComponent === 'personaldetails'){
+      setShowHome(false)
+      setShowWorkExperience(false)
+      setShowPersonalDetails(true)
+      
+    }
+   
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(`Updating ${name} with value: ${value}`);
+    // console.log(`Updating ${name} with value: ${value}`);
 
     // Update formData with the selected value
     updateFormData({
@@ -27,7 +47,7 @@ function PersonalDetails() {
       },
     });
   };
-
+  // console.log(formData)
   const handleChanges = (event) => {
     const file = event.target.files[0];
 
@@ -45,15 +65,14 @@ function PersonalDetails() {
     }
   };
 
-  const handleButtonClic = () => {
-    navigate('/');
-  };
+  
 
   return (
     <div className='container-fluid'>
+      {showHome && <Home/>}
       {showWorkExperience && <WorkExperience />}
 
-      {!showWorkExperience && (
+      {showPersonalDetails && (
         <div>
           <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'start' }}>
             {/* Input for file selection */}
@@ -253,8 +272,8 @@ function PersonalDetails() {
           <hr className='mb-5' />
 
           <div className='d-flex justify-content-between'>
-            <button className="btn btn-primary" type='button' onClick={handleButtonClic}> Back</button>
-            <button className="btn btn-primary" type="button" onClick={handleButtonClick} >Next</button>
+            <button className="btn btn-primary" type='button' onClick={handleButtonClick} value={'home'}> Back</button>
+            <button className="btn btn-primary" type="button" onClick={handleButtonClick} value={'workexperience'}>Next</button>
           </div>
         </div>
       )}

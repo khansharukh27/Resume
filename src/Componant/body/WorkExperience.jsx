@@ -5,159 +5,119 @@ import FormContext from "../context/FormContext";
 
 function WorkExperience() {
   const { formData, updateFormData } = useContext(FormContext);
-  const [workExperiences, setWorkExperiences] = useState([
-    { jobTitle: "", organizationName: "", workStartYear: "", workEndYear: "" },
+  const [workInputs, setWorkInputs] = useState([
+    {
+      jobTitle: "",
+      organizationName: "",
+      startYear: "",
+      endYear: "",
+    },
   ]);
-  const [showEducation, setShowEducation] = useState(false);
   const [showPersonalDetails, setShowPersonalDetails] = useState(false);
-  const [showWorkExperience,setShowWorkExperience] = useState(true)
+  const [showEducation, setShowEducation] = useState(false);
+  const [showWorkExperience, setShowWorkExperience] = useState(true);
 
-  const handleButtonClick = (event) => {
-    event.preventDefault();
-    const selectedComponent = event.target.value;
-
-    if (selectedComponent === "personaldetails") {
-      setShowPersonalDetails(true);
-      setShowEducation(false);
-      setShowWorkExperience(false)
-    } else if (selectedComponent === "education") {
-      setShowPersonalDetails(false);
-      setShowEducation(true);
-      setShowWorkExperience(false)
-    }else if(selectedComponent === 'workexperience'){
-      setShowPersonalDetails(false);
-      setShowEducation(false);
-      setShowWorkExperience(true)
-      
-    }
-  };
-
-  const handleChange = (event, index) => {
+  const handleChange = (index, event) => {
     const { name, value } = event.target;
-    const updatedWorkExperiences = [...workExperiences];
-    updatedWorkExperiences[index][name] = value;
-
-    setWorkExperiences(updatedWorkExperiences);
+    const newWorkInputs = [...workInputs];
+    newWorkInputs[index][name] = value;
+    setWorkInputs(newWorkInputs);
+    // console.log(`Updated workInputs: ${JSON.stringify(newWorkInputs)}`);
     const updatedFormData = {
       ...formData,
-      workExperiences:updatedWorkExperiences
+      workInputs:newWorkInputs
     }
-
+    
     updateFormData({
       target: {
-        name: 'formData',
+        name: "formData",
         value: updatedFormData,
+      
       },
     });
+  
+    console.log("Updated formData:", updatedFormData);
   };
-  console.log('workExperiences:-',workExperiences)
+  console.log("updated Inputs",workInputs)
 
-  const handleAddExperience = () => {
-    setWorkExperiences([
-      ...workExperiences,
-      { jobTitle: "", organizationName: "", workStartYear: "", workEndYear: "" },
-    ]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const selectComponent = e.target.value;
+    if (selectComponent === "personalDetails") {
+      setShowPersonalDetails(true);
+      setShowEducation(false);
+      setShowWorkExperience(false);
+    } else if (selectComponent === "education") {
+      setShowPersonalDetails(false);
+      setShowEducation(true);
+      setShowWorkExperience(false);
+    }
+    else if (selectComponent === "workexperience") {
+      setShowPersonalDetails(false);
+      setShowEducation(false);
+      setShowWorkExperience(true);
+    }
   };
-
-  let currentYear = new Date().getFullYear();
-  let years = Array.from({ length: 10 }, (_, index) => currentYear - index);
-
+  const handleMore = () => {
+    setWorkInputs([...workInputs,{
+      jobTitle: "",
+      organizationName: "",
+      startYear: "",
+      endYear: "",
+    }],)
+  }
+  const handleDelete = (index,e) => {
+   const newDelete = [...workInputs]
+    newDelete.splice(index,1)
+    setWorkInputs(newDelete)
+  }
   return (
     <div>
-      {showEducation && <EducationDetails />}
+     
       {showPersonalDetails && <PersonalDetails />}
+      {showEducation && <EducationDetails />}
       {showWorkExperience && (
         <div>
-          <h4>Work Experience</h4>
-          {workExperiences && workExperiences.map((experience, index) => (
-            <div key={`experience-${index}`} className="mt-5">
-              <p>Experience {index + 1}</p>
-              <hr />
-              <br />
-
-              <div className="d-flex justify-content-between">
-                <div>
-                  <label>Job Title</label>
-                  <p>
-                    <input
-                      onChange={(e) => handleChange(e, index)}
-                      type="text"
-                      placeholder="Job Title"
-                      name="jobTitle"
-                      value={experience.jobTitle || ''}
-                    />
-                  </p>
-                </div>
-                <div>
-                  <label>Organization Name</label>
-                  <p>
-                    <input
-                      onChange={(e) => handleChange(e, index)}
-                      type="text"
-                      placeholder="Organization Name"
-                      name="organizationName"
-                      value={experience.organizationName || ''}
-                    />
-                  </p>
-                </div>
-              </div>
-
-              <div className="d-flex justify-content-between">
-                <div>
-                  <label htmlFor={`startYear-${index}`}>Start Year: </label>
-                  <p>
-                    <select
-                      name="workStartYear"
-                      value={experience.workStartYear || ''}
-                      onChange={(e) => handleChange(e, index)}
-                    >
-                      {years.map((year) => (
-                        <option key={`start-year-${index}-${year}`} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
-                  </p>
-                </div>
-
-                <div>
-                  <label htmlFor={`endYear-${index}`}>End Year: </label>
-                  <p>
-                    <select
-                      name="workEndYear"
-                      value={experience.workEndYear || ''}
-                      onChange={(e) => handleChange(e, index)}
-                    >
-                      {years.map((year) => (
-                        <option key={`end-year-${index}-${year}`} value={year}>
-                          {year}
-                        </option>
-                      ))}
-                    </select>
-                  </p>
-                </div>
-              </div>
+           <h4>Work Experience</h4>
+          {workInputs.map((workInput, index) => (
+            <div key={index}>
+              <b>Experience {index + 1}</b>
+              <input
+                type="text"
+                name="jobTitle"
+                value={workInput.jobTitle}
+                onChange={(e) => handleChange(index, e)}
+              />
+              <input
+                type="text"
+                name="organizationName"
+                value={workInput.organizationName}
+                onChange={(e) => handleChange(index, e)}
+              />
+              <input
+                type="text"
+                name="startYear"
+                value={workInput.startYear}
+                onChange={(e) => handleChange(index, e)}
+              />
+              <input
+                type="text"
+                name="endYear"
+                value={workInput.endYear}
+                onChange={(e) => handleChange(index, e)}
+              />
+              <button onClick={() => handleDelete(index)}>Delete</button>
             </div>
           ))}
 
-          <div className="text-center">
-            <button className="btn btn-primary btn-lg " onClick={handleAddExperience}>
-              Add Experience
-            </button>
+          <div className="text-center mt-4">
+            <button className="btn btn-primary btn-lg" onClick={handleMore}>Add More</button>
           </div>
-          <hr className="mb-5" />
-
-          <div className="d-flex justify-content-between mt-5">
-            <div>
-              <button className="btn btn-primary btn-lg" onClick={handleButtonClick} value="personaldetails">
-                Previous
-              </button>
-            </div>
-            <div>
-              <button className="btn btn-primary btn-lg" onClick={handleButtonClick} value="education">
-                Next
-              </button>
-            </div>
+          <div className="d-flex justify-content-between">
+            <button className="btn btn-primary btn-lg" onClick={handleSubmit} value='personalDetails'>Previous</button>
+            <button className="btn btn-primary btn-lg" onClick={handleSubmit} value="education">
+              Next
+            </button>
           </div>
         </div>
       )}

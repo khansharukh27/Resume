@@ -21,7 +21,7 @@ function EducationDetails() {
   const handleButtonClick = (event) => {
     event.preventDefault();
     const selectedComponent = event.target.value;
-    if (selectedComponent === 'education') {
+    if (selectedComponent === "education") {
       setShowEducation(true);
       setShowKeySkill(false);
       setShowWorkExperience(false);
@@ -34,25 +34,22 @@ function EducationDetails() {
       setShowKeySkill(true);
       setShowWorkExperience(false);
     }
+    else if (selectedComponent === 'educationdetails') {
+      setShowEducation(true);
+      setShowKeySkill(false);
+      setShowWorkExperience(false);
+    }
   };
 
-  const handleChange = (event, setIndex) => {
+  const handleChange = (event, index) => {
     const { name, value } = event.target;
     // Create a copy of the current education sets
     const updatedEducationSets = [...educationSets];
-    // Update the specific field based on the input name and index
-    if (value.trim() === '') {
-      // Handle empty input, for example, set it to a default value or show an error
-      updatedEducationSets[setIndex][name] = ''; // Set to an empty string or handle it as needed
-      return;
-    }
-    updatedEducationSets[setIndex][name] = value;
-    // Update the state with the new education sets
-    setEducationSets(updatedEducationSets);
-    // Update the form data in the context
+    
+    updatedEducationSets[index][name] = value;
     const updatedFormData = {
       ...formData,
-      EducationDetails: updatedEducationSets,
+      educationDetails:updatedEducationSets,
     };
     updateFormData({
       target: {
@@ -61,6 +58,9 @@ function EducationDetails() {
       },
     });
   };
+
+  console.log('educationSets:', educationSets);
+
 
   const educationNames = ['High School', "Bachelor's Degree", "Master's Degree", 'Doctorate'];
   let currentYear = new Date().getFullYear();
@@ -93,15 +93,15 @@ function EducationDetails() {
 
               <div>
                 <div><label>Type:</label></div>
-                
-                
+
+
                 <select
                   name="education"
                   value={educationSet.education}
                   onChange={(e) => handleChange(e, setIndex)}
                 >
-                  {educationNames.map((educationName) => (
-                    <option key={educationName} value={educationName}>
+                  {educationNames.map((educationName,index) => (
+                    <option key={index} value={educationName}>
                       {educationName}
                     </option>
                   ))}
@@ -111,7 +111,7 @@ function EducationDetails() {
               <div className="d-flex justify-content-between">
                 <div>
                   <div><label>University:</label></div>
-                  
+
                   <input
                     type="text"
                     placeholder="University"
@@ -123,7 +123,7 @@ function EducationDetails() {
 
                 <div>
                   <div><label>Degree:</label></div>
-                  
+
                   <input
                     type="text"
                     placeholder="Degree"
@@ -137,7 +137,7 @@ function EducationDetails() {
               <div className="d-flex justify-content-between">
                 <div>
                   <div><label>Start Year:</label></div>
-                  
+
                   <select
                     name="startYear"
                     value={educationSet.startYear}
@@ -152,7 +152,7 @@ function EducationDetails() {
                 </div>
                 <div>
                   <div><label>End Year:</label></div>
-                  
+
                   <select
                     name="endYear"
                     value={educationSet.endYear}

@@ -2,11 +2,7 @@ import { useState } from "react";
 import FormContext from "./FormContext";
 
 const FormProvider = ({children}) => {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        message: '',
-    });
+    const [formData, setFormData] = useState('');
 
     const [pdfData, setPdfData] = useState(null);
     const [resumeSaved, setResumeSaved] = useState(false); // New state
