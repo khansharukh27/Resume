@@ -6,8 +6,8 @@ import Certification from './Certification';
 function KeySkills() {
   const { formData, updateFormData } = useContext(FormContext);
   const [skills, setSkills] = useState([
-    { name: `skill`, value: '' },
-    { name: `skill`, value: '' },
+    { name: `skill-1`, value: '' },
+    { name: `skill-2`, value: '' },
   ]);
 
   const [showKeySkill, setShowKeySkill] = useState(true);
@@ -33,7 +33,7 @@ function KeySkills() {
       },
     });
   };
-console.log('skills:-',skills)
+// console.log('skills:-',skills)
   const handleAddMore = () => {
     const newIndex = skills.length + 1;
     setSkills([...skills, { name: `Skill-${newIndex}`, value: '' }, { name: `Skill-${newIndex + 1}`, value: '' }]);

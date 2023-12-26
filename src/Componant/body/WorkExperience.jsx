@@ -6,26 +6,25 @@ import FormContext from "../context/FormContext";
 function WorkExperience() {
   const { formData, updateFormData } = useContext(FormContext);
   const [workInputs, setWorkInputs] = useState([
-    {
-      jobTitle: "",
-      organizationName: "",
-      startYear: "",
-      endYear: "",
-    },
-  ]);
+    {jobTitle1: '',
+    organizationName1: '',
+    startYear1: '',
+    endYear1: ''
+  }
+   ]);
   const [showPersonalDetails, setShowPersonalDetails] = useState(false);
   const [showEducation, setShowEducation] = useState(false);
   const [showWorkExperience, setShowWorkExperience] = useState(true);
 
-  const handleChange = (index, event) => {
-    const { name, value } = event.target;
+  const handleChange = (index,fieldName, event) => {
+    const { value } = event.target;
     const newWorkInputs = [...workInputs];
-    newWorkInputs[index][name] = value;
+    newWorkInputs[index] = {...newWorkInputs[index],[fieldName]: value};
     setWorkInputs(newWorkInputs);
     // console.log(`Updated workInputs: ${JSON.stringify(newWorkInputs)}`);
     const updatedFormData = {
       ...formData,
-      workInputs:newWorkInputs
+      workInputs: newWorkInputs
     }
     
     updateFormData({
@@ -36,9 +35,9 @@ function WorkExperience() {
       },
     });
   
-    console.log("Updated formData:", updatedFormData);
+    
   };
-  console.log("updated Inputs",workInputs)
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -59,12 +58,7 @@ function WorkExperience() {
     }
   };
   const handleMore = () => {
-    setWorkInputs([...workInputs,{
-      jobTitle: "",
-      organizationName: "",
-      startYear: "",
-      endYear: "",
-    }],)
+    setWorkInputs([...workInputs,{jobTitle1: "",organizationName1: "",startYear1: "",endYear1: "",}],)
   }
   const handleDelete = (index,e) => {
    const newDelete = [...workInputs]
@@ -84,27 +78,27 @@ function WorkExperience() {
               <b>Experience {index + 1}</b>
               <input
                 type="text"
-                name="jobTitle"
-                value={workInput.jobTitle}
-                onChange={(e) => handleChange(index, e)}
+                name="jobTitle1"
+                value={workInput.jobTitle1}
+                onChange={(e) => handleChange(index,'jobTitle1', e)}
               />
               <input
                 type="text"
-                name="organizationName"
-                value={workInput.organizationName}
-                onChange={(e) => handleChange(index, e)}
+                name="organizationName1"
+                value={workInput.organizationName1}
+                onChange={(e) => handleChange(index,'organizationName1', e)}
               />
               <input
                 type="text"
-                name="startYear"
-                value={workInput.startYear}
-                onChange={(e) => handleChange(index, e)}
+                name="startYear1"
+                value={workInput.startYear1}
+                onChange={(e) => handleChange(index,"startYear1", e)}
               />
               <input
                 type="text"
-                name="endYear"
-                value={workInput.endYear}
-                onChange={(e) => handleChange(index, e)}
+                name="endYear1"
+                value={workInput.endYear1}
+                onChange={(e) => handleChange(index,'endYear1', e)}
               />
               <button onClick={() => handleDelete(index)}>Delete</button>
             </div>

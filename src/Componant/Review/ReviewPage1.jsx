@@ -1,20 +1,18 @@
 // ReviewPage.jsx
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import FormContext from "../context/FormContext";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
 
 const ReviewPage1 = () => {
+  const { updatePdfData } = useContext(FormContext)
+  const [myResumeValue, setMyResumeValue] = useState('')
+  const [showAlert, setShowAlert] = useState(false)
   const location = useLocation();
-  const skills = location.state?.skills || [];
-  const formData = location.state?.formData || {};
+  const formData = location.state?.formData?.formData || {};
   const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate('/download');
-  }
-
-  if (!skills) {
-    return <p>Loading...</p>; // or a loading/error message
-  }
 
   const {
     firstname,
@@ -25,55 +23,167 @@ const ReviewPage1 = () => {
     city,
     state,
     postalcode,
+    language1,
+    language2,
     object,
-    profilePicture
+    profilePicture,
+    // workInputs,
   } = formData;
+  console.log('formData:-', formData)
+  const skills = formData.formData.skills || [];
+  const educationDetail = formData.formData.formData.educationSets;
+  const workInputs = formData.workInputs
+  console.log("educationDetails:-", educationDetail)
+  console.log('workInputs:-', formData.formData.formData.workInput)
+  // console.log('skills:-', skills)
+
+  useEffect(() => {
+    const storedImage = localStorage.getItem('myResumeImage')
+    if (storedImage) {
+      setMyResumeValue(storedImage)
+
+    }
+  }, [])
+  const handleSaveResume = async () => {
+    try {
+      const pdfElement = document.getElementById("alisha");
+      const canvas = await html2canvas(pdfElement);
+      const pdf = new jsPDF("p", "pt", "a4");
+      const contentWidth = pdf.internal.pageSize.getWidth();
+      const contentHeight = pdf.internal.pageSize.getHeight();
+      const ratio = Math.min(
+        contentWidth / canvas.width,
+        contentHeight / canvas.height
+      );
+
+      pdf.addImage(
+        canvas,
+        "jpg",
+        0,
+        0,
+        canvas.width * ratio,
+        canvas.height * ratio
+      );
+      updatePdfData(pdf);
+
+      const pdfBlob = pdf.output("blob");
+      const downloadLink = document.createElement("a");
+      downloadLink.href = URL.createObjectURL(pdfBlob);
+      downloadLink.download = `${myResumeValue || "Resume"}.pdf`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+
+      const imageDataUrl = canvas.toDataURL("image/png");
+      const savedResumes =
+        JSON.parse(localStorage.getItem("savedResumes")) || [];
+      savedResumes.push(imageDataUrl);
+      localStorage.setItem("savedResumes", JSON.stringify(savedResumes));
+      // window.alert("Your resume is saved as a pdf");
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false)
+      }, 2000)
+      navigate("/myresume");
+    } catch (error) {
+      console.error("Error saving resume:", error);
+    }
+
+
+  };
+  console.log()
+
 
   return (
-    <div>
-        <h1>Review Data image 2</h1>
-      <div>
-        <h1>Personal Details</h1>
-        <p>image:{profilePicture}</p>
-        <p>First Name: {firstname}</p>
-        <p>Last Name: {lastname}</p>
-        <p>Email: {email}</p>
-        <p>Mobile Number: {tel}</p>
-        <p>Address: {address}</p>
-        <p>City: {city}</p>
-        <p>State: {state}</p>
-        <p>Postal Code: {postalcode}</p>
-        <p>Objective Career: {object}</p>
-      </div>
-      <div>
-        <h2>Review</h2>
-        {skills.map((skill, index) => (
-          <p key={index}>Skill {index + 1}: {skill.value}</p>
-        ))}
-        <div>
-          <button onClick={handleClick} value="download">
-            Download
-          </button>
+    <div className="d-sm-flex " style={{}}>
+      <div className="d-flex border " id="alisha">
+        <div className="mt p-4 " style={{ backgroundColor: 'black', color: 'white' }}>
+          <div style={{}}>
+            {profilePicture && (
+              <img
+                src={URL.createObjectURL(profilePicture)}
+                alt="Profile"
+                style={{
+                  border: "1px solid grey",
+                  height: "100px",
+                  width: "100px",
+                  borderRadius: "50%",
+                }}
+              />
+            )}
+          </div>
+          <div className="mt-4">
+            <h6> <b>Contact</b></h6>
+            <hr />
+            <b>Phone</b><br />
+            {tel} <br />
+            <b>Email</b><br />
+            {email} <br />
+            <b>Address</b><br />
+            {address} {city} {state} {postalcode}
+
+          </div>
+          <div>
+            <hr />
+            {educationDetail && educationDetail.map((education, index) => (
+              <div key={index}>
+                <h6>Education {index + 1}</h6>
+                <p>{education.endYear}</p>
+                <p>{education.degree}</p>
+                <p>{education.education}</p>
+              </div>
+            ))}
+
+          </div>
+          <div>
+            <h6>Expertise</h6>
+            {skills.map((skill, index) => (
+              <div key={index}>
+
+                <p > <b>.</b> {skill.value}</p>
+              </div>
+
+            ))}
+          </div>
+          <div>
+            <h4>Language</h4><hr /><br />
+            <p> <b>.</b> {language1}</p>
+            <p><b>.</b>{language2}</p>
+
+          </div>
+
+        </div>
+        <div class={`alert alert-success ${showAlert ? 'block' : 'd-none'}`} role="alert" >
+          <h4 class="alert-heading">Well done!</h4>
+          <p>Aww yeah, you successfully read this important alert message. This example text is going to run a bit longer so that you can see how spacing within an alert works with this kind of content.</p>
+          <hr />
+          <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.</p>
+        </div>
+
+        <div className="mt-4 p-2 ">
+          <h1 style={{ whiteSpace: "nowrap" }}>{firstname} {lastname}</h1>
+          <p>{workInputs && workInputs[0].jobTitle1}</p>
+          <br />
+          <p>{object}</p>
+
+          <div>
+            <h6>Experience</h6>
+            {workInputs && workInputs.map((work, index) => (
+              <div key={index}>
+                {workInputs && <p>{work.startYear1}-{work.endYear1}</p>}
+                {workInputs && <p>{work.organizationName1}</p>}
+                {workInputs && <p>{work.jobTitle1}</p>}
+
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
-      <div>
-        <h2>Education</h2>
-        {/* Display education information */}
-        <p>Job Type: {formData.educationname}</p>
-       
-        <p>School/University: {formData.school}</p>
-        <p>Degree: {formData.degree}</p>
-        <p>Start Year: {formData.startYear}</p>
-        <p>End Year: {formData.endYear}</p>
-      </div>
-      <div>
-        <h2>Work Experience</h2>
-        {/* Display work experience information */}
-        
-        <p>Job Title: {formData.jobTitle}</p>
-        <p>Organization Name: {formData.organizationName}</p>
-        <p>Start Year: {formData.workStartYear}</p>
-        <p>End Year: {formData.workEndYear}</p>
+      <div className="d-flex border mt-sm-2"  >
+        <div><input type="text" /></div>
+        <div className="ms-2" onClick={handleSaveResume} style={{ whiteSpace: "nowrap" }}><button>Save Resume</button></div>
+
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 function Navbar() {
   return (
-    <nav class=" d-flex justify-content-between" style={{width:'100%'}}>
+    <nav className=" d-flex justify-content-between" style={{width:'100%',border:'1px,solid grey',borderRadius:'25px'}}>
 
 
       <div class=""><b>Navbar</b></div>

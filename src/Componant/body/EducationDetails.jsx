@@ -41,15 +41,14 @@ function EducationDetails() {
     }
   };
 
-  const handleChange = (event, index) => {
-    const { name, value } = event.target;
-    // Create a copy of the current education sets
+  const handleChange = (index, fieldName, event) => {
+    const { value } = event.target;
     const updatedEducationSets = [...educationSets];
-    
-    updatedEducationSets[index][name] = value;
+    updatedEducationSets[index] = { ...updatedEducationSets[index], [fieldName]: value };
+    setEducationSets(updatedEducationSets)
     const updatedFormData = {
       ...formData,
-      educationDetails:updatedEducationSets,
+      educationSets: updatedEducationSets,
     };
     updateFormData({
       target: {
@@ -59,15 +58,11 @@ function EducationDetails() {
     });
   };
 
-  console.log('educationSets:', educationSets);
-
-
   const educationNames = ['High School', "Bachelor's Degree", "Master's Degree", 'Doctorate'];
   let currentYear = new Date().getFullYear();
   const years = Array.from({ length: 30 }, (_, index) => currentYear - index);
 
   const handleAddMore = () => {
-    // Add a new empty set of education details
     setEducationSets([
       ...educationSets,
       {
@@ -83,7 +78,7 @@ function EducationDetails() {
   return (
     <div>
       {showWorkExperience && <WorkExperience />}
-      {showKeySkill && <KeySkills />}
+      {/* {showKeySkill && <KeySkills />} */}
       {showEducation && (
         <div style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
           {educationSets && educationSets.map((educationSet, setIndex) => (
@@ -93,14 +88,12 @@ function EducationDetails() {
 
               <div>
                 <div><label>Type:</label></div>
-
-
                 <select
                   name="education"
                   value={educationSet.education}
-                  onChange={(e) => handleChange(e, setIndex)}
+                  onChange={(e) => handleChange(setIndex, 'education',e)}
                 >
-                  {educationNames.map((educationName,index) => (
+                  {educationNames.map((educationName, index) => (
                     <option key={index} value={educationName}>
                       {educationName}
                     </option>
@@ -111,25 +104,23 @@ function EducationDetails() {
               <div className="d-flex justify-content-between">
                 <div>
                   <div><label>University:</label></div>
-
                   <input
                     type="text"
-                    placeholder="University"
+                    placeholder="school"
                     name="school"
                     value={educationSet.school}
-                    onChange={(e) => handleChange(e, setIndex)}
+                    onChange={(e) => handleChange(setIndex,"school",e )}
                   />
                 </div>
 
                 <div>
                   <div><label>Degree:</label></div>
-
                   <input
                     type="text"
                     placeholder="Degree"
                     name="degree"
                     value={educationSet.degree}
-                    onChange={(e) => handleChange(e, setIndex)}
+                    onChange={(e) => handleChange(setIndex, 'degree',e )}
                   />
                 </div>
               </div>
@@ -137,11 +128,10 @@ function EducationDetails() {
               <div className="d-flex justify-content-between">
                 <div>
                   <div><label>Start Year:</label></div>
-
                   <select
                     name="startYear"
                     value={educationSet.startYear}
-                    onChange={(e) => handleChange(e, setIndex)}
+                    onChange={(e) => handleChange(setIndex, 'startYear', e)}
                   >
                     {years.map((year) => (
                       <option key={`start-year-${year}`} value={year}>
@@ -152,11 +142,10 @@ function EducationDetails() {
                 </div>
                 <div>
                   <div><label>End Year:</label></div>
-
                   <select
                     name="endYear"
                     value={educationSet.endYear}
-                    onChange={(e) => handleChange(e, setIndex)}
+                    onChange={(e) => handleChange(setIndex, 'endYear', e)}
                   >
                     {years.map((year) => (
                       <option key={`end-year-${year}`} value={year}>
@@ -193,6 +182,8 @@ function EducationDetails() {
           ))}
         </div>
       )}
+            {showKeySkill && <KeySkills />}
+
     </div>
   );
 }

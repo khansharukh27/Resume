@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import KeySkills from './KeySkills';
 import FormContext from '../context/FormContext';
 import { useNavigate } from 'react-router-dom';
-
+// import workInpusts from './WorkExperience';
 function Certification() {
   const { formData, updateFormData } = useContext(FormContext);
   const [showCertification, setShowCertification] = useState(true);
@@ -19,6 +19,19 @@ function Certification() {
     const newCertification = [...link];
     newCertification[index] = { ...newCertification[index], value };
     setLink(newCertification);
+
+    const updatedFormData = {
+      ...formData,
+      link: link,
+    };
+
+    updateFormData({
+      target: {
+        name: 'formData',
+        value: updatedFormData,
+      },
+    });
+
   };
 
   const handleClick = () => {
@@ -36,20 +49,20 @@ function Certification() {
     const selectImageId = formData.selectedImageId;
     const certifications = `/review/${selectImageId}`;
     // Update formData here, after setting link state
-    const updatedFormData = {
-      ...formData,
-      link: link,
-    };
+    // const updatedFormData = {
+    //   ...formData,
+    //   link: link,
+    // };
 
-    updateFormData({
-      target: {
-        name: 'formData',
-        value: updatedFormData,
-      },
-    });
+    // updateFormData({
+    //   target: {
+    //     name: 'formData',
+    //     value: updatedFormData,
+    //   },
+    // });
 
     // Navigate to the next page
-    navigate(certifications, { state: { link, formData } });
+    navigate(certifications, { state: {  formData } });
   };
 
     // Update the formData state with the current form data, including skills

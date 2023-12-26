@@ -177,7 +177,7 @@ function PersonalDetails() {
               value={formData.dateofbirth || ''}
             />
           </div>
-
+          
           <div className="mb-3">
             <div className="d-flex justify-content-between">
               <div className="w-45 me-2">

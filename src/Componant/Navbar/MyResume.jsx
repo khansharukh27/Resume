@@ -48,7 +48,7 @@ const MyResume = () => {
         <div
           className="col-lg-3 col-md-4 col-sm-6 col-12"
           key={index}
-          style={{ margin: "10px" , border:'1px solid grey' }}
+          style={{ margin: "10px" ,  }}
         >
           <div
             className="position-relative"
@@ -60,7 +60,7 @@ const MyResume = () => {
               id={`resumeImage-${index}`}
               src={item}
               alt={`Saved Resume ${index + 1}`}
-              style={{ maxWidth: "100%", height: "auto", marginBottom: "5px" }}
+              style={{ maxWidth: "100%", height: "auto", marginBottom: "" }}
             />
             {hoveredIndex === index && (
               <div className="d-flex justify-content-between">
